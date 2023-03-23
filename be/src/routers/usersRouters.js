@@ -1,10 +1,15 @@
 import express from "express";
+import verifytoken from "../middlewares/verifyToken";
 import { deleteModel } from "mongoose";
 import { createUser, getUserId, getUsers, updateUser } from "../services/usersService";
 
 const usersRouter= express.Router();
 
-usersRouter.get('/', async(req, res)=>{
+usersRouter.get('/me', verifytoken, (req, res)=>{
+    return res.json(req.user);
+});
+
+usersRouter.get('/', verifytoken, async(req, res)=>{
     res.json(await getUsers());
 });
 
